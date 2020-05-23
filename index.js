@@ -3,8 +3,8 @@ let app = express();
 let server = require('http').createServer(app);
 let io = require('socket.io')(server);
 let cors = require('cors');
-// let PORT = process.env.PORT || 8000;
-let PORT = process.env.PORT || 8080;
+let PORT = process.env.PORT || 8000;
+// let PORT = process.env.PORT || 8080;
 console.log('server started on port ' + PORT);
 
 app.use(express.static(__dirname + '/public'));
@@ -22,6 +22,10 @@ io.on('connection', function(socket) {
     //chat
     socket.on('send',function(data) {
         socket.broadcast.to(data.room).emit('message', {message: data.message, author: data.author})
+    })
+
+    socket.on('move',function(data) {
+        socket.broadcast.to(data.room).emit('move', {direction: data.direction})
     })
     
     // //signaling
